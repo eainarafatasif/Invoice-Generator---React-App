@@ -40,20 +40,20 @@ To deploy a React.js project using Nginx and MySQL on Ubuntu 22.04, follow these
    ```bash
    sudo apt install mysql-server -y
    ```
-  
    Log in to MySQL and create a database for your React.js project if needed:
    ```bash
    sudo mysql -u root -p
    ```
-In a React.js project, the frontend itself does not directly interact with the database. Instead, you typically set up a backend server (e.g., using Node.js, Django, Flask, etc.) that handles database operations. The React.js frontend communicates with the backend through API calls. Here’s a general outline of how to set up your database interaction for a React.js project:
-
-### 1. **Create the Database in MySQL**
-   You've already created a MySQL database with:
+   Inside the MySQL shell, run:
    ```sql
-   CREATE DATABASE your_database_name;
+    CREATE DATABASE django_db;
+    CREATE USER 'django_user'@'localhost' IDENTIFIED BY 'Pa$$word';
+    GRANT ALL ON django_db.* TO 'django_user'@'localhost';
+    FLUSH PRIVILEGES;
+    EXIT
    ```
 
-### 2. **Set Up a Backend to Interact with MySQL**
+### 5. **Set Up a Backend to Interact with MySQL**
    You need a backend server to handle database operations. Here’s a basic setup using Node.js with Express:
 
    1. **Install Node.js and Express:**
@@ -61,7 +61,7 @@ In a React.js project, the frontend itself does not directly interact with the d
       npm install express mysql
       ```
 
-   2. **Create a Backend Server:**
+   6. **Create a Backend Server:**
       Create a `server.js` file in your project directory:
       ```javascript
       const express = require('express');
@@ -99,12 +99,12 @@ In a React.js project, the frontend itself does not directly interact with the d
       });
       ```
 
-   3. **Start the Backend Server:**
+   7. **Start the Backend Server:**
       ```bash
       node server.js
       ```
 
-### 3. **Make API Calls from React.js**
+### 8. **Make API Calls from React.js**
    In your React.js frontend, you can make API calls to interact with the backend server, which in turn interacts with the MySQL database.
 
    Here’s how you can fetch data from the backend using `fetch` or `axios`:
@@ -141,19 +141,18 @@ In a React.js project, the frontend itself does not directly interact with the d
    export default App;
    ```
 
-### 4. **Proxy Requests to Backend in Development**
+### 9. **Proxy Requests to Backend in Development**
    If you're running your React app in development mode (e.g., using `npm start`), you can set up a proxy in the `package.json` file to forward requests to the backend:
 
    ```json
    "proxy": "http://localhost:5000"
    ```
 
-### 5. **Deploy Backend and Frontend Together**
+### 10. **Deploy Backend and Frontend Together**
    When deploying, ensure that both the React frontend and the backend are correctly configured on the server. You can use tools like Nginx to reverse proxy requests to the appropriate service (React frontend or backend).
 
-By following these steps, your React.js project will be able to interact with the MySQL database through a backend server. Let me know if you need more detailed guidance on any part of this setup!
 
-### 5. **Build the React.js Project**
+### 11. **Build the React.js Project**
    Navigate to your React.js project directory:
    ```bash
    cd /path/to/your/react-project
@@ -168,7 +167,7 @@ By following these steps, your React.js project will be able to interact with th
    ```
    The build files will be generated in a `build` folder.
 
-### 6. **Configure Nginx for React.js**
+### 12. **Configure Nginx for React.js**
    Remove the default Nginx configuration:
    ```bash
    sudo rm /etc/nginx/sites-enabled/default
@@ -204,29 +203,22 @@ By following these steps, your React.js project will be able to interact with th
    sudo ln -s /etc/nginx/sites-available/react-app /etc/nginx/sites-enabled/
    ```
 
-### 7. **Restart Nginx**
+### 13. **Restart Nginx**
    ```bash
    sudo systemctl restart nginx
    ```
 
-### 8. **Configure SSL (Optional)**
+### 14. **Configure SSL (Optional)**
    If you need to secure your site with SSL, you can use Let's Encrypt:
    ```bash
    sudo apt install certbot python3-certbot-nginx -y
    sudo certbot --nginx -d your_domain_or_ip
    ```
 
-### 9. **Check the Deployment**
+### 15. **Check the Deployment**
    Visit your server's IP address or domain name in a browser to verify the deployment.
 
-### 10. **Configure MySQL for Backend (Optional)**
+### 16. **Configure MySQL for Backend (Optional)**
    If your React app communicates with a backend that uses MySQL, ensure that the backend is correctly configured to connect to the MySQL database.
 
 Let me know if you need further assistance!
-
-- [ ] Store invoices in Firebase DB
-
-
-### Meta
-
-John Uberbacher – [johnuberbacher.com](https://johnuberbacher.com)
